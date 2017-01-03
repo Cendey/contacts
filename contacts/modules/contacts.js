@@ -11,6 +11,7 @@
 let express = require('express');
 let oracle = require('oracledb');
 let parser = require("js2xmlparser");
+let levelup = require('level');
 let config = require('./../data/config.js');
 let sql = require('./../data/sql');
 let router = express.Router();
