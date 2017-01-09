@@ -9,7 +9,7 @@
  * @version 1.0
  */
 let mongoose = require("mongoose");
-let meta = require("./../../../config/ssh/config");
+let meta = require("./../../config/ssh/config");
 let Schema = mongoose.Schema;
 
 function toContact(body, Contact) {

@@ -5,7 +5,7 @@
  */
 
 let app = require('../app');
-let debug = require('debug')('contacts:server');
+let debug = require('debug')('contact:server');
 let http = require('http');
 
 /**
