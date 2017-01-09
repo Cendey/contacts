@@ -145,6 +145,10 @@ exports.create = function (model, requestBody, response) {
     contact.save(function (error) {
         if (!error) {
             contact.save();
+            if (response) {
+                response.writeHead(201, {'Content-Type': 'text/plain'});
+                response.end('Created');
+            }
         } else {
             console.log('Checking if contact saving failed due to already existing primary number:' + primaryNumber);
             model.findOne({primarycontactnumber: primaryNumber},
