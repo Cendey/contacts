@@ -24,11 +24,11 @@ router.post('/update', function (request, response) {
     contactHandle.update(Contact, request.body, response)
 });
 
-router.post('/add', function (request, response) {
+router.put('/add', function (request, response) {
     contactHandle.create(Contact, request.body, response)
 });
 
-router.post('/delete/:primarycontactnumber', function (request, response) {
+router.delete('/delete/:primarycontactnumber', function (request, response) {
     contactHandle.remove(Contact, request.params.primarycontactnumber, response)
 });
 
