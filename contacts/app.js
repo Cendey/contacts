@@ -7,7 +7,7 @@ let bodyParser = require('body-parser');
 
 let index = require('./routes/index');
 let users = require('./routes/users');
-let contacts = require('./modules/contacts');
+let contacts = require('./modules/handler/contacts/handle');
 
 const app = express();
 

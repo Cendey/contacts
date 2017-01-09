@@ -1,38 +1,38 @@
 {
     "result": [
         {
-            "FirstName": "Joe",
-            "LastName": "Smith",
-            "Title": "Mr.",
-            "Company": "Dev Inc.",
-            "JobTitle": "Developer",
-            "PrimaryContactNumber": "+359777123456",
-            "OtherContactNumbers": [
+            "firstname": "Joe",
+            "lastname": "Smith",
+            "title": "Mr.",
+            "company": "Dev Inc.",
+            "jobtitle": "Developer",
+            "primarycontactnumber": "+359777123456",
+            "othercontactnumbers": [
                 "+359777456789",
                 "+359777112233"
             ],
-            "PrimaryEmailAddress": "joe.smith@xyz.com",
-            "OtherEmailAddresses": [
+            "primaryemailaddress": "joe.smith@xyz.com",
+            "otheremailaddresses": [
                 "j.smith@xyz.com"
             ],
-            "Groups": [
+            "groups": [
                 "Dev",
                 "Family"
             ]
         },
         {
-            "FirstName": "John",
-            "LastName": "Douglas",
-            "Title": "Mr.",
-            "Company": "Dev Inc.",
-            "JobTitle": "Manager",
-            "PrimaryContactNumber": "+359777223344",
-            "OtherContactNumbers": [],
-            "PrimaryEmailAddress": "john.douglas@xyz.com",
-            "OtherEmailAddresses": [
+            "firstname": "John",
+            "lastname": "Douglas",
+            "title": "Mr.",
+            "company": "Dev Inc.",
+            "jobtitle": "Manager",
+            "primarycontactnumber": "+359777223344",
+            "othercontactnumbers": [],
+            "primaryemailaddress": "john.douglas@xyz.com",
+            "otheremailaddresses": [
                 "j.douglas@xyz.com"
             ],
-            "Groups": [
+            "groups": [
                 "Dev"
             ]
         }
