@@ -100,8 +100,7 @@ exports.update = function (model, requestBody, response) {
             if (error) {
                 console.log(error);
                 if (response) {
-                    response.writeHead(500,
-                        {'Content-Type': 'text/plain'});
+                    response.writeHead(500, {'Content-Type': 'text/plain'});
                     response.end('Internal server error');
                 }
             } else {
@@ -145,6 +144,10 @@ exports.create = function (model, requestBody, response) {
     contact.save(function (error) {
         if (!error) {
             contact.save();
+            if (response) {
+                response.writeHead(201, {'Content-Type': 'text/plain'});
+                response.end('Created');
+            }
         } else {
             console.log('Checking if contact saving failed due to already existing primary number:' + primaryNumber);
             model.findOne({primarycontactnumber: primaryNumber},
@@ -153,8 +156,7 @@ exports.create = function (model, requestBody, response) {
                     if (error) {
                         console.log(error);
                         if (response) {
-                            response.writeHead(500,
-                                {'Content-Type': 'text/plain'});
+                            response.writeHead(500, {'Content-Type': 'text/plain'});
                             response.end('Internal server error');
                         }
                     } else {
@@ -169,8 +171,7 @@ exports.create = function (model, requestBody, response) {
                                 }
                             });
                             if (response) {
-                                response.writeHead(201,
-                                    {'Content-Type': 'text/plain'});
+                                response.writeHead(201, {'Content-Type': 'text/plain'});
                                 response.end('Created');
                             }
                         } else {
@@ -199,8 +200,7 @@ exports.findByNumber = function (model, primaryNumber, response) {
         function (error, result) {
             if (error) {
                 console.error(error);
-                response.writeHead(500,
-                    {'Content-Type': 'text/plain'});
+                response.writeHead(500,{'Content-Type': 'text/plain'});
                 response.end('Internal server error');
             } else {
                 if (!result) {
