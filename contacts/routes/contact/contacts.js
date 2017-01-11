@@ -33,7 +33,13 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 });
 
 router.get('/list', function (request, response) {
-    console.log('Listing all contact with ' + request.params.key + '=' + request.params.value);
-    contactHandle.list(Contact, response);
+    let query = url.parse(request.url, true).query;
+    if(Object.keys(query).length){
+        console.log('Listing contact with ' + request.params.key + '=' + request.params.value);
+        contactHandle.queryByFilter(Contact, query, response);
+    }else{
+        console.log('Listing all contacts with ' + request.params.key + '=' + request.params.value);
+        contactHandle.list(Contact, response);
+    }
 });
 module.exports = router;

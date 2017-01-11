@@ -29,6 +29,24 @@ function toContact(body, Contact) {
     );
 }
 
+//build a JSON string with the attribute and the value
+function buildFilter(params) {
+    let filter = '{';
+    if (params) {
+        let isFirst = false;
+        for (let key of Object.keys(params)) {
+            if (!isFirst) {
+                isFirst = true
+            } else {
+                filter = filter.concat(',');
+            }
+            filter = filter.concat('\"' + key + '\":\"' + params[key] + '\"');
+        }
+    }
+    filter = filter.concat('}');
+    return JSON.parse(filter);
+}
+
 function populateContact(data, contact) {
     data.firstname = contact.firstname;
     data.lastname = contact.lastname;
@@ -198,7 +216,7 @@ exports.findByNumber = function (model, primaryNumber, response) {
         function (error, result) {
             if (error) {
                 console.error(error);
-                response.writeHead(500,{'Content-Type': 'text/plain'});
+                response.writeHead(500, {'Content-Type': 'text/plain'});
                 response.end('Internal server error');
             } else {
                 if (!result) {
@@ -232,11 +250,8 @@ exports.list = function (model, response) {
     });
 };
 
-exports.queryBySingleKey = function (model, key, value, response) {
-    //build a JSON string with the attribute and the value
-    let filterArg = '{\"' + key + '\":' + '\"' + value + '\"}';
-    let filter = JSON.parse(filterArg);
-    model.find(filter, function (error, result) {
+exports.queryByFilter = function (model, params, response) {
+    model.find(buildFilter(params), function (error, result) {
         if (error) {
             console.error(error);
             response.writeHead(500, {'Content-Type': 'text/plain'});
