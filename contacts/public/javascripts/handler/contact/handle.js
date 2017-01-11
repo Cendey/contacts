@@ -71,8 +71,7 @@ exports.remove = function (model, primaryNumber, response) {
                 if (!data) {
                     console.log('not found');
                     if (response) {
-                        response.writeHead(404,
-                            {'Content-Type': 'text/plain'});
+                        response.writeHead(404, {'Content-Type': 'text/plain'});
                         response.end('Not Found');
                     }
                 } else {
@@ -113,8 +112,7 @@ exports.update = function (model, requestBody, response) {
                             contact.save();
                     });
                     if (response) {
-                        response.writeHead(201,
-                            {'Content-Type': 'text/plain'});
+                        response.writeHead(201, {'Content-Type': 'text/plain'});
                         response.end('Created');
                     }
                     return;
@@ -231,5 +229,30 @@ exports.list = function (model, response) {
             response.end(JSON.stringify(result));
         }
         return JSON.stringify(result);
+    });
+};
+
+exports.queryBySingleKey = function (model, key, value, response) {
+    //build a JSON string with the attribute and the value
+    let filterArg = '{\"' + key + '\":' + '\"' + value + '\"}';
+    let filter = JSON.parse(filterArg);
+    model.find(filter, function (error, result) {
+        if (error) {
+            console.error(error);
+            response.writeHead(500, {'Content-Type': 'text/plain'});
+            response.end('Internal server error');
+        } else {
+            if (!result) {
+                if (response) {
+                    response.writeHead(404, {'Content-Type': 'text/plain'});
+                    response.end('Not Found');
+                }
+                return;
+            }
+            if (response) {
+                response.setHeader('Content-Type', 'application/json');
+                response.send(result);
+            }
+        }
     });
 };
