@@ -56,7 +56,7 @@ function populateContact(data, contact) {
     data.primarycontactnumber = contact.primarycontactnumber;
     data.othercontactnumbers = contact.othercontactnumbers;
     data.primaryemailaddress = contact.primaryemailaddress;
-    data.otheremailaddress = contact.otheremailaddress;
+    data.otheremailaddresses = contact.otheremailaddresses;
     data.groups = contact.groups;
 }
 
