@@ -8,9 +8,19 @@
  * @since 1/9/2017
  * @version 1.0
  */
-let mongoose = require("mongoose");
-let meta = require("./../../config/ssh/config");
+let log4js = require('log4js');
+let mongoose = require('mongoose');
+let meta = require('./../../config/ssh/config');
 let Schema = mongoose.Schema;
+
+let logger = initLog();
+logger.setLevel('TRACE');
+
+function initLog() {
+    log4js.loadAppender('file');
+    log4js.addAppender(log4js.appenders.file('logs/std.log'), 'standard');
+    return log4js.getLogger('standard');
+}
 
 function toContact(body, Contact) {
     return new Contact(
@@ -64,9 +74,9 @@ exports.initConnection = function () {
     let connectionInfo = meta.mongodbConnectionInfo();
     mongoose.connect(connectionInfo.url);
     let instance = mongoose.connection;
-    instance.on('error', console.error.bind(console, 'connection error:'));
+    instance.on('error', logger.error.bind(logger, 'connection error:'));
     instance.once('open', function () {
-        console.log('Connect to database: ' + connectionInfo.provider);
+        logger.info('Connect to database: ' + connectionInfo.provider);
     });
 };
 
@@ -76,18 +86,18 @@ exports.initSchema = function (name) {
 };
 
 exports.remove = function (model, primaryNumber, response) {
-    console.log('Deleting contact with primary number: ' + primaryNumber);
+    logger.warn('Deleting contact with primary number: ' + primaryNumber);
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, data) {
             if (error) {
-                console.log(error);
+                logger.error(error);
                 if (response) {
                     response.writeHead(500, {'Content-Type': 'text/plain'});
                     response.end('Internal server error');
                 }
             } else {
                 if (!data) {
-                    console.log('not found');
+                    logger.warn('Not found');
                     if (response) {
                         response.writeHead(404, {'Content-Type': 'text/plain'});
                         response.end('Not Found');
@@ -98,7 +108,7 @@ exports.remove = function (model, primaryNumber, response) {
                             data.remove();
                         }
                         else {
-                            console.log(error);
+                           logger.error(error);
                         }
                     });
                     if (response) {
@@ -115,7 +125,7 @@ exports.update = function (model, requestBody, response) {
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, data) {
             if (error) {
-                console.log(error);
+                logger.error(error);
                 if (response) {
                     response.writeHead(500, {'Content-Type': 'text/plain'});
                     response.end('Internal server error');
@@ -123,7 +133,7 @@ exports.update = function (model, requestBody, response) {
             } else {
                 let contact = toContact(requestBody, model);
                 if (!data) {
-                    console.log('Contact with primary number: ' + primaryNumber
+                    logger.warn('Contact with primary number: ' + primaryNumber
                         + ' does not exist. The contact will be created.');
                     contact.save(function (error) {
                         if (!error)
@@ -140,10 +150,10 @@ exports.update = function (model, requestBody, response) {
                 // now save
                 data.save(function (error) {
                     if (!error) {
-                        console.log('Successfully updated contact with primary number: ' + primaryNumber);
+                        logger.info('Successfully updated contact with primary number: ' + primaryNumber);
                         data.save();
                     } else {
-                        console.log('error on save');
+                        logger.error('error on save');
                     }
                 });
                 if (response) {
@@ -165,12 +175,12 @@ exports.create = function (model, requestBody, response) {
                 response.end('Created');
             }
         } else {
-            console.log('Checking if contact saving failed due to already existing primary number:' + primaryNumber);
+            logger.warn('Checking if contact saving failed due to already existing primary number:' + primaryNumber);
             model.findOne({primarycontactnumber: primaryNumber},
                 function (error, data) {
                     populateContact(data, contact);
                     if (error) {
-                        console.log(error);
+                        logger.error(error);
                         if (response) {
                             response.writeHead(500, {'Content-Type': 'text/plain'});
                             response.end('Internal server error');
@@ -178,12 +188,12 @@ exports.create = function (model, requestBody, response) {
                     } else {
                         let contact = toContact(requestBody, model);
                         if (!data) {
-                            console.log('The contact does not exist. It will be created');
+                            logger.warn('The contact does not exist. It will be created');
                             contact.save(function (error) {
                                 if (!error) {
                                     contact.save();
                                 } else {
-                                    console.log(error);
+                                    logger.error(error);
                                 }
                             });
                             if (response) {
@@ -191,16 +201,16 @@ exports.create = function (model, requestBody, response) {
                                 response.end('Created');
                             }
                         } else {
-                            console.log('Updating contact with primary contact number:' + primaryNumber);
+                            logger.info('Updating contact with primary contact number:' + primaryNumber);
                             populateContact();
                             data.save(function (error) {
                                 if (!error) {
                                     data.save();
                                     response.end('Updated');
-                                    console.log('Successfully Updated contact with primary contact number: ' + primaryNumber);
+                                    logger.info('Successfully Updated contact with primary contact number: ' + primaryNumber);
                                 } else {
-                                    console.log('Error while saving contact with primary contact number:' + primaryNumber);
-                                    console.log(error);
+                                    logger.error('Error while saving contact with primary contact number:' + primaryNumber);
+                                    logger.error(error);
                                 }
                             });
                         }
@@ -215,7 +225,7 @@ exports.findByNumber = function (model, primaryNumber, response) {
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, result) {
             if (error) {
-                console.error(error);
+                logger.error(error);
                 response.writeHead(500, {'Content-Type': 'text/plain'});
                 response.end('Internal server error');
             } else {
@@ -230,7 +240,7 @@ exports.findByNumber = function (model, primaryNumber, response) {
                     response.setHeader('Content-Type', 'application/json');
                     response.send(result);
                 }
-                console.log(result);
+                logger.info(result);
             }
         }
     );
@@ -239,7 +249,7 @@ exports.findByNumber = function (model, primaryNumber, response) {
 exports.list = function (model, response) {
     model.find({}, function (error, result) {
         if (error) {
-            console.error(error);
+            logger.error(error);
             return null;
         }
         if (response) {
@@ -253,7 +263,7 @@ exports.list = function (model, response) {
 exports.queryByFilter = function (model, params, response) {
     model.find(buildFilter(params), function (error, result) {
         if (error) {
-            console.error(error);
+            logger.error(error);
             response.writeHead(500, {'Content-Type': 'text/plain'});
             response.end('Internal server error');
         } else {
