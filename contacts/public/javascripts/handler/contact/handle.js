@@ -8,18 +8,13 @@
  * @since 1/9/2017
  * @version 1.0
  */
-let log4js = require('log4js');
+
 let mongoose = require('mongoose');
-let meta = require('./../../../../config/ssh/config.js');
+let overview = require('./../../../../config/utils/config.js');
 let Schema = mongoose.Schema;
 mongoose.Promise = Promise;
 
-let logger = initLog();
-
-function initLog() {
-    log4js.configure('config/log4js.json');
-    return log4js.getLogger('standard');
-}
+let logger = overview.initLog();
 
 function toContact(body, Contact) {
     return new Contact(
@@ -72,7 +67,7 @@ function populateContact(data, contact) {
 }
 
 exports.initConnection = function () {
-    let connectionInfo = meta.mongodbConnectionInfo();
+    let connectionInfo = overview.mongodbConnectionInfo();
     mongoose.connect(connectionInfo.url);
     let instance = mongoose.connection;
     instance.on('error', logger.error.bind(logger, 'connection error:'));
@@ -82,7 +77,7 @@ exports.initConnection = function () {
 };
 
 exports.initSchema = function (name) {
-    let contactSchema = new Schema(meta.contactSchema());
+    let contactSchema = new Schema(overview.contactSchema());
     return mongoose.model(name, contactSchema);
 };
 

@@ -1,6 +1,6 @@
 /**
  * <p>Project: MIT Liberal Project</p>
- * <p>Description: dbconfig</p>
+ * <p>Description: config</p>
  * <p>Copyright: Copyright (c) 2016</p>
  * <p>Company: MIT Liberal Co., Ltd.</p>
  *
@@ -9,6 +9,7 @@
  * @version 1.0
  */
 "use strict";
+let log4js = require('log4js');
 
 exports.oracleConnectionInfo = function () {
     let info = Object.create(null);
@@ -68,4 +69,9 @@ exports.contactSchema = function () {
     schema.otheremailaddresses = String;
     schema.groups = [String];
     return schema;
+};
+
+exports.initLog = function () {
+    log4js.configure('config/log4js.json');
+    return log4js.getLogger('standard');
 };
