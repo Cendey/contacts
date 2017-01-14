@@ -35,7 +35,7 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 router.get('/list', function (request, response) {
     let query = url.parse(request.url, true).query;
     if(Object.keys(query).length){
-        console.log('Listing contact with ' + request.params.key + '=' + request.params.value);
+        console.log('Listing contact with query parameters' + query);
         contactHandle.queryByFilter(Contact, query, response);
     }else{
         console.log('Listing all contacts with ' + request.params.key + '=' + request.params.value);

@@ -27,6 +27,18 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/contacts', contacts);
 
+/**
+ * make a log directory, just in case it isn't there.
+ */
+try {
+    require('fs').mkdirSync('./logs');
+} catch (error) {
+    if (error.code !== 'EEXIST') {
+        console.error("Could not set up log directory, error was: ", error);
+        process.exit(1);
+    }
+}
+
 // catch 404 and forward to error handler
 app.use(function (request, response, next) {
     let error = new Error('Not Found');

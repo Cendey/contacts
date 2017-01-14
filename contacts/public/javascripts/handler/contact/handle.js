@@ -10,15 +10,14 @@
  */
 let log4js = require('log4js');
 let mongoose = require('mongoose');
-let meta = require('./../../config/ssh/config');
+let meta = require('./../../../../config/ssh/config.js');
 let Schema = mongoose.Schema;
+mongoose.Promise = Promise;
 
 let logger = initLog();
-logger.setLevel('TRACE');
 
 function initLog() {
-    log4js.loadAppender('file');
-    log4js.addAppender(log4js.appenders.file('logs/std.log'), 'standard');
+    log4js.configure('config/log4js.json');
     return log4js.getLogger('standard');
 }
 
@@ -58,16 +57,18 @@ function buildFilter(params) {
 }
 
 function populateContact(data, contact) {
-    data.firstname = contact.firstname;
-    data.lastname = contact.lastname;
-    data.title = contact.title;
-    data.company = contact.company;
-    data.jobtitle = contact.jobtitle;
-    data.primarycontactnumber = contact.primarycontactnumber;
-    data.othercontactnumbers = contact.othercontactnumbers;
-    data.primaryemailaddress = contact.primaryemailaddress;
-    data.otheremailaddresses = contact.otheremailaddresses;
-    data.groups = contact.groups;
+    if (contact) {
+        data.firstname = contact.firstname;
+        data.lastname = contact.lastname;
+        data.title = contact.title;
+        data.company = contact.company;
+        data.jobtitle = contact.jobtitle;
+        data.primarycontactnumber = contact.primarycontactnumber;
+        data.othercontactnumbers = contact.othercontactnumbers;
+        data.primaryemailaddress = contact.primaryemailaddress;
+        data.otheremailaddresses = contact.otheremailaddresses;
+        data.groups = contact.groups;
+    }
 }
 
 exports.initConnection = function () {
@@ -108,7 +109,7 @@ exports.remove = function (model, primaryNumber, response) {
                             data.remove();
                         }
                         else {
-                           logger.error(error);
+                            logger.error(error);
                         }
                     });
                     if (response) {
@@ -170,6 +171,7 @@ exports.create = function (model, requestBody, response) {
     contact.save(function (error) {
         if (!error) {
             contact.save();
+            logger.info("Create a new contact");
             if (response) {
                 response.writeHead(201, {'Content-Type': 'text/plain'});
                 response.end('Created');
