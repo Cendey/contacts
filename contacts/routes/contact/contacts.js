@@ -15,10 +15,10 @@ const utilities = require('./../../utils/utilities');
 const contactHandle = require('./../../public/javascripts/handler/contact/handle');
 let router = express.Router();
 
-let logger = initiate.initLog();
+let logger = initiate.logger;
 
-contactHandle.initConnection();
-let Contact = contactHandle.initSchema('Contact');
+initiate.initConnection();
+let Contact = initiate.initSchema('Contact');
 router.get('/query/:number', function (request, response) {
     logger.info(request.url + ' : querying for ' + request.params.number);
     contactHandle.findByNumber(Contact, request.params.number, response);

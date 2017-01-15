@@ -9,8 +9,21 @@
  * @since 1/15/2017
  */
 const log4js = require('log4js');
+const mongoose = require('mongoose');
+const grid = require('gridfs-stream');
+const access = require('./../config/access');
+let Schema = mongoose.Schema;
+mongoose.Promise = Promise;
 
-exports.contactSchema = function () {
+const logger = initLog();
+exports.logger = logger;
+
+function initLog(category = 'standard') {
+    log4js.configure('config/log4js.json');
+    return log4js.getLogger(category);
+}
+
+function contactSchema() {
     let schema = Object.create(null);
     schema.firstname = String;
     schema.lastname = String;
@@ -23,9 +36,29 @@ exports.contactSchema = function () {
     schema.otheremailaddresses = String;
     schema.groups = [String];
     return schema;
+}
+
+exports.initConnection = function () {
+    let connectionInfo = access.mongodbConnectionInfo();
+    mongoose.connect(connectionInfo.url);
+    let instance = mongoose.connection;
+    instance.on('error', logger.error.bind(logger, 'connection error:'));
+    instance.once('open', function () {
+        logger.info('Connect to database: ' + connectionInfo.provider);
+    });
 };
 
-exports.initLog = function () {
-    log4js.configure('config/log4js.json');
-    return log4js.getLogger('standard');
+exports.initSchema = function (name) {
+    let instance = new Schema(contactSchema());
+    return mongoose.model(name, instance);
+};
+
+exports.retrieveGridFStream = function () {
+    if (mongoose.connection && mongoose.connection.db) {
+        return grid(mongoose.connection.db, mongoose.mongo);
+    } else {
+        let errorMsg = 'Can\'t create grid file system stream, please ensure mongodb connected first';
+        logger.error(errorMsg);
+        throw new Error(errorMsg);
+    }
 };

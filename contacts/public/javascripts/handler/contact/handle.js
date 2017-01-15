@@ -8,15 +8,9 @@
  * @since 1/9/2017
  * @version 1.0
  */
+const initiate = require('./../../../../utils/initiate');
 
-const mongoose = require('mongoose');
-const access = require('./../../../../config/access');
-const init = require('./../../../../utils/initiate');
-let Schema = mongoose.Schema;
-mongoose.Promise = Promise;
-
-let logger = init.initLog();
-
+let logger = initiate.logger;
 function toContact(body, Contact) {
     return new Contact(
         {
@@ -66,21 +60,6 @@ function populateContact(data, contact) {
         data.groups = contact.groups;
     }
 }
-
-exports.initConnection = function () {
-    let connectionInfo = access.mongodbConnectionInfo();
-    mongoose.connect(connectionInfo.url);
-    let instance = mongoose.connection;
-    instance.on('error', logger.error.bind(logger, 'connection error:'));
-    instance.once('open', function () {
-        logger.info('Connect to database: ' + connectionInfo.provider);
-    });
-};
-
-exports.initSchema = function (name) {
-    let contactSchema = new Schema(init.contactSchema());
-    return mongoose.model(name, contactSchema);
-};
 
 exports.remove = function (model, primaryNumber, response) {
     logger.warn('Deleting contact with primary number: ' + primaryNumber);
