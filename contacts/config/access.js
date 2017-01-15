@@ -9,7 +9,6 @@
  * @version 1.0
  */
 "use strict";
-let log4js = require('log4js');
 
 exports.oracleConnectionInfo = function () {
     let info = Object.create(null);
@@ -54,24 +53,4 @@ exports.mongodbConnectionInfo = function () {
     //Database Url to access
     info.url = info.provider + "://" + info.user + ":" + info.password + "@" + info.ip + ":" + info.port + "/" + info.database;
     return info;
-};
-
-exports.contactSchema = function () {
-    let schema = Object.create(null);
-    schema.firstname = String;
-    schema.lastname = String;
-    schema.title = String;
-    schema.company = String;
-    schema.jobtitle = String;
-    schema.primarycontactnumber = {type: String, index: {unique: true}};
-    schema.othercontactnumbers = [String];
-    schema.primaryemailaddress = String;
-    schema.otheremailaddresses = String;
-    schema.groups = [String];
-    return schema;
-};
-
-exports.initLog = function () {
-    log4js.configure('config/log4js.json');
-    return log4js.getLogger('standard');
 };

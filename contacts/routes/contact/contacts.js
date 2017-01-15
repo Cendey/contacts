@@ -8,13 +8,14 @@
  * @since 12/27/2016
  * @version 1.0
  */
-let express = require('express');
-let url = require('url');
-let overview = require('./../../config/utils/config.js');
-let contactHandle = require('./../../public/javascripts/handler/contact/handle');
+const express = require('express');
+const url = require('url');
+const initiate = require('./../../utils/initiate');
+const utilities = require('./../../utils/utilities');
+const contactHandle = require('./../../public/javascripts/handler/contact/handle');
 let router = express.Router();
 
-let logger = overview.initLog();
+let logger = initiate.initLog();
 
 contactHandle.initConnection();
 let Contact = contactHandle.initSchema('Contact');
@@ -38,7 +39,7 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 router.get('/list', function (request, response) {
     let query = url.parse(request.url, true).query;
     if (Object.keys(query).length) {
-        logger.info('Listing contact with query parameters' + query.);
+        logger.info('Listing contact with query parameters' + utilities.toLiteral(query));
         contactHandle.queryByFilter(Contact, query, response);
     } else {
         logger.info('Listing all contacts with none filter');

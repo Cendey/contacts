@@ -9,12 +9,13 @@
  * @version 1.0
  */
 
-let mongoose = require('mongoose');
-let overview = require('./../../../../config/utils/config.js');
+const mongoose = require('mongoose');
+const access = require('./../../../../config/access');
+const init = require('./../../../../utils/initiate');
 let Schema = mongoose.Schema;
 mongoose.Promise = Promise;
 
-let logger = overview.initLog();
+let logger = init.initLog();
 
 function toContact(body, Contact) {
     return new Contact(
@@ -67,7 +68,7 @@ function populateContact(data, contact) {
 }
 
 exports.initConnection = function () {
-    let connectionInfo = overview.mongodbConnectionInfo();
+    let connectionInfo = access.mongodbConnectionInfo();
     mongoose.connect(connectionInfo.url);
     let instance = mongoose.connection;
     instance.on('error', logger.error.bind(logger, 'connection error:'));
@@ -77,7 +78,7 @@ exports.initConnection = function () {
 };
 
 exports.initSchema = function (name) {
-    let contactSchema = new Schema(overview.contactSchema());
+    let contactSchema = new Schema(init.contactSchema());
     return mongoose.model(name, contactSchema);
 };
 

@@ -31,5 +31,10 @@
             ],
             "replaceConsole": true
         }
-    ]
+    ],
+    "replaceConsole": true,
+    "levels": {
+        "[all]": "WARN",
+        "[default]": "TRACE"
+    }
 }
