@@ -13,11 +13,11 @@ exports.toLiteral = function (source) {
     let result = "";
     if (source) {
         let counter = 0;
-        if (!source.prototype) Object.setPrototypeOf(source, Object.prototype);
-        for (let key in Object.keys(source)) {
-            if (counter) result = result.concat('; ');
-            result = result.concat(key).concat('=').concat(source[key]);
-            ++counter;
+        for (let key in source) {
+            if (source.hasOwnProperty(key)) {
+                if (counter++) result = result.concat('; ');
+                result = result.concat(key).concat('=').concat(source[key]);
+            }
         }
     }
     return result;

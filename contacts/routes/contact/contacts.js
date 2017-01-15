@@ -39,7 +39,7 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 router.get('/list', function (request, response) {
     let query = url.parse(request.url, true).query;
     if (Object.keys(query).length) {
-        logger.info('Listing contact with query parameters' + utilities.toLiteral(query));
+        logger.info('Listing contact with query parameters ' + utilities.toLiteral(request.query));
         contactHandle.queryByFilter(Contact, query, response);
     } else {
         logger.info('Listing all contacts with none filter');
