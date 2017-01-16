@@ -1,0 +1,42 @@
+{
+    "appenders": [
+        {
+            "type": "clustered",
+            "appenders": [
+                {
+                    "type": "stdout",
+                    "category": "standard"
+                },
+                {
+                    "type": "dateFile",
+                    "filename": "logs/access.log",
+                    "pattern": "-yyyy-MM-dd",
+                    "maxLogSize": 10485760,
+                    "numBackups": 3,
+                    "category": "web"
+                },
+                {
+                    "type": "file",
+                    "filename": "logs/app.log",
+                    "maxLogSize": 10485760,
+                    "numBackups": 3,
+                    "category": "standard"
+                },
+                {
+                    "type": "logLevelFilter",
+                    "appender": {
+                        "type": "file",
+                        "filename": "logs/errors.log"
+                    },
+                    "category": "filter"
+                }
+            ]
+        }
+    ],
+    "replaceConsole": true,
+    "levels": {
+        "web": "WARN",
+        "standard": "TRACE",
+        "filter": "ERROR"
+    }
+}

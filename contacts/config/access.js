@@ -1,6 +1,6 @@
 /**
  * <p>Project: MIT Liberal Project</p>
- * <p>Description: dbconfig</p>
+ * <p>Description: config</p>
  * <p>Copyright: Copyright (c) 2016</p>
  * <p>Company: MIT Liberal Co., Ltd.</p>
  *
@@ -53,19 +53,4 @@ exports.mongodbConnectionInfo = function () {
     //Database Url to access
     info.url = info.provider + "://" + info.user + ":" + info.password + "@" + info.ip + ":" + info.port + "/" + info.database;
     return info;
-};
-
-exports.contactSchema = function () {
-    let schema = Object.create(null);
-    schema.firstname = String;
-    schema.lastname = String;
-    schema.title = String;
-    schema.company = String;
-    schema.jobtitle = String;
-    schema.primarycontactnumber = {type: String, index: {unique: true}};
-    schema.othercontactnumbers = [String];
-    schema.primaryemailaddress = String;
-    schema.otheremailaddresses = String;
-    schema.groups = [String];
-    return schema;
 };
