@@ -15,7 +15,7 @@ const utilities = require('./../../utils/utilities');
 const contactHandle = require('./../../public/javascripts/handler/contact/handle');
 let router = express.Router();
 
-let logger = initiate.logger;
+let logger = initiate.factory('standard');
 
 initiate.initConnection();
 let Contact = initiate.initSchema('Contact');

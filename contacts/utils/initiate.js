@@ -8,20 +8,36 @@
  * @version 1.0
  * @since 1/15/2017
  */
+const fs = require('fs');
 const log4js = require('log4js');
 const mongoose = require('mongoose');
 const grid = require('gridfs-stream');
 const access = require('./../config/access');
 let Schema = mongoose.Schema;
 mongoose.Promise = Promise;
+const logger = factory('standard');
 
-const logger = initLog();
-exports.logger = logger;
+function logDir() {
+    /**
+     * make a log directory, just in case it isn't there.
+     */
+    try {
+        fs.mkdirSync('./logs');
+    } catch (error) {
+        if (error.code !== 'EEXIST') {
+            console.error("Could not set up log directory, error was: ", error);
+            process.exit(1);
+        }
+    }
+}
 
-function initLog(category = 'standard') {
+function factory(category = 'standard') {
+    logDir();
     log4js.configure('config/log4js.json');
     return log4js.getLogger(category);
 }
+
+exports.factory = factory;
 
 function contactSchema() {
     let schema = Object.create(null);

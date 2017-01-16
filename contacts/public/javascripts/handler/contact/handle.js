@@ -10,7 +10,7 @@
  */
 const initiate = require('./../../../../utils/initiate');
 
-let logger = initiate.logger;
+let logger = initiate.factory('standard');
 function toContact(body, Contact) {
     return new Contact(
         {
