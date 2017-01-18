@@ -12,18 +12,21 @@ const fs = require('fs');
 const log4js = require('log4js');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
-const grid = require('gridfs-stream');
+const Grid = require('gridfs-stream');
+const CacheControl = require('express-cache-control');
 const access = require('./../config/access');
-let Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 mongoose.Promise = Promise;
-const logger = factory('standard');
 
-function logDir() {
+const logger = factory('logger','standard');
+const cache = factory('cache');
+
+function makeSubDir(subDir) {
     /**
      * make a log directory, just in case it isn't there.
      */
     try {
-        fs.mkdirSync('./logs');
+        fs.mkdirSync('./' + subDir);
     } catch (error) {
         if (error.code !== 'EEXIST') {
             console.error("Could not set up log directory, error was: ", error);
@@ -32,10 +35,40 @@ function logDir() {
     }
 }
 
-function factory(category = 'standard') {
-    logDir();
+function buildLogger(category) {
+    makeSubDir('logs');
     log4js.configure('config/log4js.json');
     return log4js.getLogger(category);
+}
+
+function buildCache() {
+    return new CacheControl().middleware;
+}
+
+function buildGrid() {
+    if (mongoose.connection && mongoose.connection.db) {
+        return new Grid(mongoose.connection.db, mongoose.mongo);
+    } else {
+        let errorMsg = 'Can\'t create grid file system stream, please ensure mongodb connected first';
+        logger.error(errorMsg);
+        throw new Error(errorMsg);
+    }
+}
+
+function factory(component, category = 'standard') {
+    let target = null;
+    switch (component) {
+        case 'logger':
+            target = buildLogger(category);
+            break;
+        case 'cache':
+            target = buildCache();
+            break;
+        case 'grid':
+           target = buildGrid();
+            break;
+    }
+    return target;
 }
 
 exports.factory = factory;
@@ -71,12 +104,5 @@ exports.initSchema = function (name) {
     return mongoose.model(name, instance);
 };
 
-exports.retrieveGridFStream = function () {
-    if (mongoose.connection && mongoose.connection.db) {
-        return grid(mongoose.connection.db, mongoose.mongo);
-    } else {
-        let errorMsg = 'Can\'t create grid file system stream, please ensure mongodb connected first';
-        logger.error(errorMsg);
-        throw new Error(errorMsg);
-    }
-};
+exports.logger = logger;
+exports.cache = cache;

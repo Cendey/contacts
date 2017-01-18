@@ -10,7 +10,8 @@
  */
 const initiate = require('./../../../../utils/initiate');
 
-let logger = initiate.factory('standard');
+const logger = initiate.factory('logger', 'standard');
+
 function toContact(body, Contact) {
     return new Contact(
         {
@@ -261,11 +262,11 @@ exports.queryByFilter = function (model, params, response) {
 
 exports.queryByPaginate = function (model, request, response) {
     model.paginate({}, request.query, function (error, result) {
-        if(error) {
+        if (error) {
             logger.error(error);
             response.writeHead(500, {'Content-Type': 'text/plain'});
             response.end('Internal server error');
-        }else {
+        } else {
             logger.info(`Page count is ${result.pages} & item count is ${result.total}`);
             response.json({object: 'contacts', result: result});
         }

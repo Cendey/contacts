@@ -13,9 +13,10 @@ const url = require('url');
 const initiate = require('./../../utils/initiate');
 const utilities = require('./../../utils/utilities');
 const contactHandle = require('./../../public/javascripts/handler/contact/handle');
-let router = express.Router();
+const router = express.Router();
 
-let logger = initiate.factory('standard');
+const logger = initiate.factory('logger','standard');
+const cache = initiate.factory('cache');
 
 initiate.initConnection();
 let Contact = initiate.initSchema('Contact');
@@ -36,13 +37,13 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
     contactHandle.remove(Contact, request.params.primarycontactnumber, response)
 });
 
-router.get('/list', function (request, response) {
+router.get('/list', cache('minutes', 1), function (request, response) {
     let query = url.parse(request.url, true).query;
     if (Object.keys(query).length) {
-        if(query['limit'] || query['page']){
+        if (query['limit'] || query['page']) {
             logger.info(`Listing contact with limit ${query["limit"]} or page ${query["page"]}`);
             contactHandle.queryByPaginate(Contact, request, response);
-        }else{
+        } else {
             logger.info('Listing contact with query parameters ' + utilities.toLiteral(request.query));
             contactHandle.queryByFilter(Contact, query, response);
         }
