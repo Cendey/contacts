@@ -11,6 +11,7 @@
 const fs = require('fs');
 const log4js = require('log4js');
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 const grid = require('gridfs-stream');
 const access = require('./../config/access');
 let Schema = mongoose.Schema;
@@ -66,6 +67,7 @@ exports.initConnection = function () {
 
 exports.initSchema = function (name) {
     let instance = new Schema(contactSchema());
+    instance.plugin(mongoosePaginate);
     return mongoose.model(name, instance);
 };
 

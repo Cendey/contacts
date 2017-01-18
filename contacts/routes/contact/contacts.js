@@ -39,11 +39,16 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 router.get('/list', function (request, response) {
     let query = url.parse(request.url, true).query;
     if (Object.keys(query).length) {
-        logger.info('Listing contact with query parameters ' + utilities.toLiteral(request.query));
-        contactHandle.queryByFilter(Contact, query, response);
+        if(query['limit'] || query['page']){
+            logger.info(`Listing contact with limit ${query["limit"]} or page ${query["page"]}`);
+            contactHandle.queryByPaginate(Contact, request, response);
+        }else{
+            logger.info('Listing contact with query parameters ' + utilities.toLiteral(request.query));
+            contactHandle.queryByFilter(Contact, query, response);
+        }
     } else {
         logger.info('Listing all contacts with none filter');
-        contactHandle.list(Contact, response);
+        contactHandle.queryByPaginate(Contact, request, response);
     }
 });
 module.exports = router;

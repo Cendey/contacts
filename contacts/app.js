@@ -1,4 +1,5 @@
 const express = require('express');
+const expressPaginate = require('express-paginate');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -17,6 +18,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(expressPaginate.middleware(1, 20));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
