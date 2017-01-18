@@ -180,7 +180,7 @@ exports.create = function (model, requestBody, response) {
                             }
                         } else {
                             logger.info('Updating contact with primary contact number:' + primaryNumber);
-                            populateContact();
+                            populateContact(data, contact);
                             data.save(function (error) {
                                 if (!error) {
                                     data.save();
