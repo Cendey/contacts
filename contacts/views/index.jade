@@ -3,6 +3,6 @@ extends layout
 block content
     h1= title
     p#welcome.top Welcome to #{title}
-    form(id="enter" action="/contacts/list")
+    form(id="enter" action=service.trim() + action.trim())
         div#top
-        input(type="submit" id="nav" value="Contacts")
+        input(type="submit" id="nav" value="Enter")

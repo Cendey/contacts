@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+    table(border="2")
+        caption.title Contact(s) List
+        tr
+            th.head ID
+            th.head First Name
+            th.head Last Name
+            th.head Title
+            th.head Company
+            th.head Job Title
+            th.head Primary Contact Number
+            th.head Other Contact Number
+            th.head Primary Email Address
+            th.head Other Email Address
+            th.head Groups
+            each contact in result.docs
+                tr
+                    td#data #{contact._id}
+                    td#data #{contact.firstname}
+                    td#data #{contact.lastname}
+                    td#data #{contact.title}
+                    td#data #{contact.company}
+                    td#data #{contact.jobtitle}
+                    td#data #{contact.primarycontactnumber}
+                    td#data #{contact.othercontactnumbers.join("\n")}
+                    td#data #{contact.primaryemailaddress}
+                    td#data #{contact.otheremailaddresses}
+                    td#data #{contact.groups.join("\n")}

@@ -268,7 +268,7 @@ function queryByPaginate(model, request, response) {
             response.end('Internal server error');
         } else {
             logger.info(`Page count is ${result.pages} & item count is ${result.total}`);
-            response.json({object: 'contacts', result: result});
+            response.render("contact/contacts", {object: 'contacts', result: result});
         }
     });
 }

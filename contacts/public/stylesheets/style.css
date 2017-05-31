@@ -6,3 +6,17 @@ body {
 a {
     color: #00B7FF;
 }
+
+.head {
+    background-color: #8A2BE2
+}
+
+#data {
+    background-color: burlywood;
+}
+
+.title {
+    align-content: left;
+    font-style: italic;
+    font-size: medium;
+}
