@@ -2,4 +2,7 @@ extends layout
 
 block content
     h1= title
-    p Welcome to #{title}
+    p#welcome.top Welcome to #{title}
+    form(id="enter" action="/contacts/list")
+        div#top
+        input(type="submit" id="nav" value="Contacts")
