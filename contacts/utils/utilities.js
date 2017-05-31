@@ -9,7 +9,7 @@
  * @since 1/15/2017
  */
 
-exports.toLiteral = function (source) {
+function literal(source) {
     let result = "";
     if (source) {
         let counter = 0;
@@ -21,4 +21,8 @@ exports.toLiteral = function (source) {
         }
     }
     return result;
+}
+
+module.exports = {
+    literal
 };

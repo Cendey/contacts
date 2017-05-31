@@ -62,7 +62,7 @@ function populateContact(data, contact) {
     }
 }
 
-exports.remove = function (model, primaryNumber, response) {
+function remove(model, primaryNumber, response) {
     logger.warn('Deleting contact with primary number: ' + primaryNumber);
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, data) {
@@ -95,9 +95,9 @@ exports.remove = function (model, primaryNumber, response) {
             }
         }
     );
-};
+}
 
-exports.update = function (model, requestBody, response) {
+function update(model, requestBody, response) {
     let primaryNumber = requestBody.primarycontactnumber;
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, data) {
@@ -139,9 +139,9 @@ exports.update = function (model, requestBody, response) {
             }
         }
     );
-};
+}
 
-exports.create = function (model, requestBody, response) {
+function create(model, requestBody, response) {
     let contact = toContact(requestBody, model);
     let primaryNumber = requestBody.primarycontactnumber;
     contact.save(function (error) {
@@ -197,9 +197,9 @@ exports.create = function (model, requestBody, response) {
             );
         }
     });
-};
+}
 
-exports.findByNumber = function (model, primaryNumber, response) {
+function findByNumber(model, primaryNumber, response) {
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, result) {
             if (error) {
@@ -222,9 +222,9 @@ exports.findByNumber = function (model, primaryNumber, response) {
             }
         }
     );
-};
+}
 
-exports.list = function (model, response) {
+function list(model, response) {
     model.find({}, function (error, result) {
         if (error) {
             logger.error(error);
@@ -236,9 +236,9 @@ exports.list = function (model, response) {
         }
         return JSON.stringify(result);
     });
-};
+}
 
-exports.queryByFilter = function (model, params, response) {
+function queryByFilter(model, params, response) {
     model.find(buildFilter(params), function (error, result) {
         if (error) {
             logger.error(error);
@@ -258,9 +258,9 @@ exports.queryByFilter = function (model, params, response) {
             }
         }
     });
-};
+}
 
-exports.queryByPaginate = function (model, request, response) {
+function queryByPaginate(model, request, response) {
     model.paginate({}, request.query, function (error, result) {
         if (error) {
             logger.error(error);
@@ -271,4 +271,8 @@ exports.queryByPaginate = function (model, request, response) {
             response.json({object: 'contacts', result: result});
         }
     });
+}
+
+module.exports = {
+    remove, update, create, list, findByNumber, queryByFilter, queryByPaginate
 };

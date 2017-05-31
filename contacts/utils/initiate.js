@@ -18,7 +18,7 @@ const access = require('./../config/access');
 const Schema = mongoose.Schema;
 mongoose.Promise = Promise;
 
-const logger = factory('logger','standard');
+const logger = factory('logger', 'standard');
 const cache = factory('cache');
 
 function makeSubDir(subDir) {
@@ -29,7 +29,7 @@ function makeSubDir(subDir) {
         fs.mkdirSync('./' + subDir);
     } catch (error) {
         if (error.code !== 'EEXIST') {
-            console.error("Could not set up log directory, error was: ", error);
+            logger.error("Could not set up log directory, error was: ", error);
             process.exit(1);
         }
     }
@@ -65,13 +65,11 @@ function factory(component, category = 'standard') {
             target = buildCache();
             break;
         case 'grid':
-           target = buildGrid();
+            target = buildGrid();
             break;
     }
     return target;
 }
-
-exports.factory = factory;
 
 function contactSchema() {
     let schema = Object.create(null);
@@ -88,7 +86,16 @@ function contactSchema() {
     return schema;
 }
 
-exports.initConnection = function () {
+function authSchema() {
+    "use strict";
+    let schema = Object.create(null);
+    schema.username = {type: String, index: {unique: true}};
+    schema.password = String;
+    schema.role = [String];
+    return schema;
+}
+
+function initConnection() {
     let connectionInfo = access.mongodbConnectionInfo();
     mongoose.connect(connectionInfo.url);
     let instance = mongoose.connection;
@@ -96,13 +103,14 @@ exports.initConnection = function () {
     instance.once('open', function () {
         logger.info('Connect to database: ' + connectionInfo.provider);
     });
-};
+}
 
-exports.initSchema = function (name) {
-    let instance = new Schema(contactSchema());
+function initModel(name, schema) {
+    let instance = new Schema(schema);
     instance.plugin(mongoosePaginate);
     return mongoose.model(name, instance);
-};
+}
 
-exports.logger = logger;
-exports.cache = cache;
+module.exports = {
+    logger, cache, factory, contactSchema, authSchema, initConnection, initModel
+};

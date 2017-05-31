@@ -15,11 +15,27 @@ const utilities = require('./../../utils/utilities');
 const contactHandle = require('./../../public/javascripts/handler/contact/handle');
 const router = express.Router();
 
-const logger = initiate.factory('logger','standard');
+const logger = initiate.factory('logger', 'standard');
 const cache = initiate.factory('cache');
 
 initiate.initConnection();
-let Contact = initiate.initSchema('Contact');
+let Contact = initiate.initModel('Contact', initiate.contactSchema());
+let User = initiate.initModel('User', initiate.authSchema());
+let adminUser = new User({
+    username: 'admin',
+    password: 'admin',
+    role: 'Admin'
+});
+
+adminUser.save(function (error) {
+    if (!error) {
+        adminUser.save();
+        logger.info('Create Administrator User Success!');
+    } else {
+        logger.info('Administrator User Already Exists!');
+    }
+});
+
 router.get('/query/:number', function (request, response) {
     logger.info(request.url + ' : querying for ' + request.params.number);
     contactHandle.findByNumber(Contact, request.params.number, response);
@@ -44,7 +60,7 @@ router.get('/list', cache('minutes', 1), function (request, response) {
             logger.info(`Listing contact with limit ${query["limit"]} or page ${query["page"]}`);
             contactHandle.queryByPaginate(Contact, request, response);
         } else {
-            logger.info('Listing contact with query parameters ' + utilities.toLiteral(request.query));
+            logger.info('Listing contact with query parameters ' + utilities.literal(request.query));
             contactHandle.queryByFilter(Contact, query, response);
         }
     } else {
