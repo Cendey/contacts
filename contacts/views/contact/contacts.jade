@@ -1,15 +1,5 @@
 extends ../layout
 
-mixin header(item)
-    each key in Object.keys(item).sort()
-        if(item.hasOwnProperty(key))
-            th.head #{key}
-
-mixin details(item)
-    each key in Object.keys(item).sort()
-        if(item.hasOwnProperty(key))
-            td#data #{Array.isArray(item[key]) ? item[key].join("\n") : item[key]}
-
 block content
     table(border="2")
         caption.title Contact(s) List
