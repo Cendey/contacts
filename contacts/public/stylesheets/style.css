@@ -1,4 +1,6 @@
 body {
+    text-align: center;
+    background-color: aquamarine;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
