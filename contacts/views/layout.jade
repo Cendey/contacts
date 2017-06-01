@@ -3,16 +3,16 @@ doctype html
 mixin header(item)
     each key in Object.keys(item).sort()
         if(item.hasOwnProperty(key))
-            th(class='head')=key
+            th.head=key
 
 mixin details(item)
     each key in Object.keys(item).sort()
         if(item.hasOwnProperty(key))
-            td(class='data')=(Array.isArray(item[key]) ? item[key].join("\n") : item[key])
+            td.data=(Array.isArray(item[key]) ? item[key].join("\n") : item[key])
 
 html
     head
-        title= title
+        title=title
         link(rel='stylesheet', href='/stylesheets/style.css')
     body
         block content
