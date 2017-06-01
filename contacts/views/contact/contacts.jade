@@ -1,24 +1,21 @@
 extends ../layout
 
-mixin header(keys)
-    each key in keys
-        th.head #{key}
+mixin header(item)
+    each key in Object.keys(item).sort()
+        if(item.hasOwnProperty(key))
+            th.head #{key}
+
+mixin details(item)
+    each key in Object.keys(item).sort()
+        if(item.hasOwnProperty(key))
+            td#data #{Array.isArray(item[key]) ? item[key].join("\n") : item[key]}
+
 block content
     table(border="2")
         caption.title Contact(s) List
         tr
-            +header(['ID', 'First Name', 'Last Name', 'Title', 'Company', 'Job Title', 'Primary Contact Number', 'Other Contact Number', 'Primary Email Address', 'Other Email Address', 'Groups'])
+            +header(result.docs[0]._doc)
 
         each contact in result.docs
             tr
-                td#data #{contact._id}
-                td#data #{contact.firstname}
-                td#data #{contact.lastname}
-                td#data #{contact.title}
-                td#data #{contact.company}
-                td#data #{contact.jobtitle}
-                td#data #{contact.primarycontactnumber}
-                td#data #{contact.othercontactnumbers.join("\n")}
-                td#data #{contact.primaryemailaddress}
-                td#data #{contact.otheremailaddresses}
-                td#data #{contact.groups.join("\n")}
+                +details(contact._doc)
