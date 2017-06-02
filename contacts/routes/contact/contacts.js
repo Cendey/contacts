@@ -68,4 +68,5 @@ router.get('/list', cache('minutes', 1), function (request, response) {
         contactHandle.queryByPaginate(Contact, request, response);
     }
 });
+
 module.exports = router;

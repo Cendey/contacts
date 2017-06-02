@@ -12,6 +12,14 @@ const initiate = require('./../../../../utils/initiate');
 
 const logger = initiate.factory('logger', 'standard');
 
+/**
+ * <em>Summary</em> <p>Transform query body to target object in mongodb schema</p>
+ * @param body <p>Query body</p>
+ * @param Contact <p>Contact model</p>
+ * @returns {*}
+ *
+ * @private
+ */
 function toContact(body, Contact) {
     return new Contact(
         {
@@ -30,6 +38,12 @@ function toContact(body, Contact) {
 }
 
 //build a JSON string with the attribute and the value
+/**
+ * <em>Summary<em> <p>Build filter to mongodb query criterion</p>
+ * @param params <p>Query criterion</p>
+ *
+ * @private
+ */
 function buildFilter(params) {
     let filter = '{';
     if (params) {
@@ -47,6 +61,13 @@ function buildFilter(params) {
     return JSON.parse(filter);
 }
 
+/**
+ * <em>Summary</em> <p>Populate contact model record to fill data</p>
+ * @param data <p>Construe to hold contact record</p>
+ * @param contact <p>Contact model record from mongodb</p>
+ *
+ * @private
+ */
 function populateContact(data, contact) {
     if (contact) {
         data.firstname = contact.firstname;
@@ -62,6 +83,14 @@ function populateContact(data, contact) {
     }
 }
 
+/**
+ * <em>Summary</em> <p>Delete specified contact from mongodb</p>
+ * @param model <p>Contact model schema</p>
+ * @param primaryNumber <p>Contact primary number as key to search</p>
+ * @param response <p>Client request corresponding feedback</p>
+ *
+ * @public
+ */
 function remove(model, primaryNumber, response) {
     logger.warn('Deleting contact with primary number: ' + primaryNumber);
     model.findOne({primarycontactnumber: primaryNumber},
@@ -97,6 +126,14 @@ function remove(model, primaryNumber, response) {
     );
 }
 
+/**
+ * <em>Summary</em> <p>Update a specified contact information</p>
+ * @param model <p>Contact model schema</p>
+ * @param requestBody <p>Specified contact criterion</p>
+ * @param response <p>Client's feedback</p>
+ *
+ * @public
+ */
 function update(model, requestBody, response) {
     let primaryNumber = requestBody.primarycontactnumber;
     model.findOne({primarycontactnumber: primaryNumber},
@@ -141,6 +178,14 @@ function update(model, requestBody, response) {
     );
 }
 
+/**
+ * <em>Summary</em> <p>Add a new contact to mongodb</p>
+ * @param model <p>Contact model schema</p>
+ * @param requestBody <p>A new contact information from client request</p>
+ * @param response <p>Feedback to client request</p>
+ *
+ * @public
+ */
 function create(model, requestBody, response) {
     let contact = toContact(requestBody, model);
     let primaryNumber = requestBody.primarycontactnumber;
@@ -199,6 +244,14 @@ function create(model, requestBody, response) {
     });
 }
 
+/**
+ * <em>Summary</em> <p>Find a contact according to its primary contact number</p>
+ * @param model <p>Contact schema model</p>
+ * @param primaryNumber <p>Given contact's primary number as search key</p>
+ * @param response <p>Client's feedback</p>
+ *
+ * @public
+ */
 function findByNumber(model, primaryNumber, response) {
     model.findOne({primarycontactnumber: primaryNumber},
         function (error, result) {
@@ -224,6 +277,13 @@ function findByNumber(model, primaryNumber, response) {
     );
 }
 
+/**
+ * <em>Summary</em> <p>List all contacts persisted in mongodb</p>
+ * @param model <p>Contact model schema</p>
+ * @param response <p>Client's feedback</p>
+ *
+ * @public
+ */
 function list(model, response) {
     model.find({}, function (error, result) {
         if (error) {
@@ -238,6 +298,14 @@ function list(model, response) {
     });
 }
 
+/**
+ * <em>Summary</em> <p>Query contact(s) with criterion or filter</p>
+ * @param model <p>Contact model schema</p>
+ * @param params <p>Query criterion or filter condition</p>
+ * @param response <p>Client's feedback</p>
+ *
+ * @public
+ */
 function queryByFilter(model, params, response) {
     model.find(buildFilter(params), function (error, result) {
         if (error) {
@@ -253,13 +321,20 @@ function queryByFilter(model, params, response) {
                 return;
             }
             if (response) {
-                response.setHeader('Content-Type', 'application/json');
-                response.send(result);
+                response.render('contact/contacts', {object: 'contacts', result: result});
             }
         }
     });
 }
 
+/**
+ * <em>Summary</em> <p>Query contacts with page navigate viewing</p>
+ * @param model <p>Contact model schema</p>
+ * @param request <p>Query criterion or filter condition</p>
+ * @param response <p>Client's feedback</p>
+ *
+ * @public
+ */
 function queryByPaginate(model, request, response) {
     model.paginate({}, request.query, function (error, result) {
         if (error) {
@@ -273,6 +348,6 @@ function queryByPaginate(model, request, response) {
     });
 }
 
-module.exports = {
+exports = module.exports = {
     remove, update, create, list, findByNumber, queryByFilter, queryByPaginate
 };

@@ -4,5 +4,12 @@ block content
     h1= title
     p#welcome.top Welcome to #{title}
     form(id="enter" action=service.trim() + action.trim())
-        div#top
+        #user
+            .basic
+                p First Name: <br>
+                    input#firstname(name="firstname")
+                p Last Name: <br>
+                    input#lastname(name="lastname")
+                p E-mail: <br>
+                    input#pemail(type="email" name="primaryemailaddress")
         input(type="submit" id="nav" value="Enter")
