@@ -24,7 +24,7 @@ let User = initiate.initModel('User', initiate.authSchema());
 let adminUser = new User({
     username: 'admin',
     password: 'admin',
-    role: 'Admin'
+    role: ['admin', 'dev']
 });
 
 adminUser.save(function (error) {
@@ -32,7 +32,7 @@ adminUser.save(function (error) {
         adminUser.save();
         logger.info('Create Administrator User Success!');
     } else {
-        logger.info('Administrator User Already Exists!');
+        logger.error('Administrator User Already Exists!');
     }
 });
 

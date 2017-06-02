@@ -8,6 +8,8 @@
  * @version 1.0
  * @since 1/15/2017
  */
+"use strict";
+
 const fs = require('fs');
 const log4js = require('log4js');
 const mongoose = require('mongoose');
@@ -87,7 +89,6 @@ function contactSchema() {
 }
 
 function authSchema() {
-    "use strict";
     let schema = Object.create(null);
     schema.username = {type: String, index: {unique: true}};
     schema.password = String;
