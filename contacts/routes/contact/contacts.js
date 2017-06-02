@@ -12,7 +12,7 @@ const express = require('express');
 const url = require('url');
 const initiate = require('./../../utils/initiate');
 const utilities = require('./../../utils/utilities');
-const contactHandle = require('./../../public/javascripts/handler/contact/handle');
+const contactHandle = require('../../handler/contact/handle');
 const router = express.Router();
 
 const logger = initiate.factory('logger', 'standard');

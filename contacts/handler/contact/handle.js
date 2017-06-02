@@ -8,7 +8,7 @@
  * @since 1/9/2017
  * @version 1.0
  */
-const initiate = require('./../../../../utils/initiate');
+const initiate = require('../../utils/initiate');
 
 const logger = initiate.factory('logger', 'standard');
 
