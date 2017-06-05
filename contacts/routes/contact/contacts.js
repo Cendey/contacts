@@ -8,10 +8,12 @@
  * @since 12/27/2016
  * @version 1.0
  */
+"use strict";
+
 const express = require('express');
 const url = require('url');
-const initiate = require('./../../utils/initiate');
-const utilities = require('./../../utils/utilities');
+const initiate = require('../../public/javascripts/utils/initiate');
+const utilities = require('../../public/javascripts/utils/utilities');
 const contactHandle = require('../../controller/contact/handle');
 const router = express.Router();
 
@@ -34,6 +36,11 @@ adminUser.save(function (error) {
     } else {
         logger.error('Administrator User Already Exists!');
     }
+});
+
+router.use(function (req, res, next) {
+    logger.info(req.method, req.url);
+    next();
 });
 
 router.get('/query/:number', function (request, response) {

@@ -12,4 +12,15 @@ block content
                     input#lastname(name="lastname")
                 p E-mail: <br>
                     input#pemail(type="email" name="primaryemailaddress")
+                p Company: <br>
+                    input#company(name="company")
+                p Groups:
+                input.group(type="checkbox" name="groups" value="Dev")
+                | Developer
+                input.group(type="checkbox" name="groups" value="Manager")
+                | Manager <br>
+                input.group(type="checkbox" name="groups" value="Family")
+                | Family
+                input.group(type="checkbox" name="groups" value="HR")
+                | HR <br>
         input(type="submit" id="nav" value="Enter")

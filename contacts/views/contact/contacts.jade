@@ -4,8 +4,8 @@ block content
     table(border="2")
         caption.title Contact(s) List
         tr
-            +header(result.docs[0]._doc)
+            +header(result.length > 0 ? result[0]._doc : result)
 
-        each contact in result.docs
+        each contact in result
             tr
                 +details(contact._doc)

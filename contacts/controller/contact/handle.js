@@ -8,7 +8,7 @@
  * @since 1/9/2017
  * @version 1.0
  */
-const initiate = require('../../utils/initiate');
+const initiate = require('../../public/javascripts/utils/initiate');
 
 const logger = initiate.factory('logger', 'standard');
 
@@ -189,7 +189,7 @@ function update(model, requestBody, response) {
 function create(model, requestBody, response) {
     let contact = toContact(requestBody, model);
     let primaryNumber = requestBody.primarycontactnumber;
-    contact.save(function (error) {
+    contact.save((error) => {
         if (!error) {
             contact.save();
             logger.info("Create a new contact");
@@ -200,7 +200,7 @@ function create(model, requestBody, response) {
         } else {
             logger.warn('Checking if contact saving failed due to already existing primary number:' + primaryNumber);
             model.findOne({primarycontactnumber: primaryNumber},
-                function (error, data) {
+                (error, data) => {
                     populateContact(data, contact);
                     if (error) {
                         logger.error(error);
@@ -212,7 +212,7 @@ function create(model, requestBody, response) {
                         let contact = toContact(requestBody, model);
                         if (!data) {
                             logger.warn('The contact does not exist. It will be created');
-                            contact.save(function (error) {
+                            contact.save((error) => {
                                 if (!error) {
                                     contact.save();
                                 } else {
@@ -226,7 +226,7 @@ function create(model, requestBody, response) {
                         } else {
                             logger.info('Updating contact with primary contact number:' + primaryNumber);
                             populateContact(data, contact);
-                            data.save(function (error) {
+                            data.save((error) => {
                                 if (!error) {
                                     data.save();
                                     response.end('Updated');
@@ -254,7 +254,7 @@ function create(model, requestBody, response) {
  */
 function findByNumber(model, primaryNumber, response) {
     model.findOne({primarycontactnumber: primaryNumber},
-        function (error, result) {
+        (error, result) => {
             if (error) {
                 logger.error(error);
                 response.writeHead(500, {'Content-Type': 'text/plain'});
@@ -285,7 +285,7 @@ function findByNumber(model, primaryNumber, response) {
  * @public
  */
 function list(model, response) {
-    model.find({}, function (error, result) {
+    model.find({}, (error, result) => {
         if (error) {
             logger.error(error);
             return null;
@@ -307,7 +307,7 @@ function list(model, response) {
  * @public
  */
 function queryByFilter(model, params, response) {
-    model.find(buildFilter(params), function (error, result) {
+    model.find(buildFilter(params), (error, result) => {
         if (error) {
             logger.error(error);
             response.writeHead(500, {'Content-Type': 'text/plain'});
@@ -336,7 +336,7 @@ function queryByFilter(model, params, response) {
  * @public
  */
 function queryByPaginate(model, request, response) {
-    model.paginate({}, request.query, function (error, result) {
+    model.paginate({}, request.query, (error, result) => {
         if (error) {
             logger.error(error);
             response.writeHead(500, {'Content-Type': 'text/plain'});

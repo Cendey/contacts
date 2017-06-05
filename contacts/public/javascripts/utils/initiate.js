@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 const Grid = require('gridfs-stream');
 const CacheControl = require('express-cache-control');
-const access = require('./../config/access');
+const access = require('../../../config/access');
 const Schema = mongoose.Schema;
 mongoose.Promise = Promise;
 
