@@ -97,7 +97,7 @@ function authSchema() {
 }
 
 function initConnection() {
-    let connectionInfo = access.mongodbConnectionInfo();
+    let connectionInfo = access.metaForMongodb();
     mongoose.connect(connectionInfo.url);
     let instance = mongoose.connection;
     instance.on('error', logger.error.bind(logger, 'connection error:'));

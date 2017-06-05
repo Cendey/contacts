@@ -10,47 +10,49 @@
  */
 "use strict";
 
-exports.oracleConnectionInfo = function () {
-    let info = Object.create(null);
+function metaForOracle() {
+    let dbMeta = Object.create(null);
     //Oracle database instance access user with authorization
-    info.user = process.env.NODE_ORACLEDB_USER || "kerry_sb1_20140208";
+    dbMeta.user = process.env.NODE_ORACLEDB_USER || "kerry_sb1_20140208";
 
     // Instead of hard coding the password, consider prompting for it,
     // passing it in an environment variable via process.env, or using
     // External Authentication.
-    info.password = process.env.NODE_ORACLEDB_PASSWORD || "kerry_sb1_20140208";
+    dbMeta.password = process.env.NODE_ORACLEDB_PASSWORD || "kerry_sb1_20140208";
 
     // For information on connection strings see:
     // https://github.com/oracle/node-oracledb/blob/master/doc/api.md#connectionstrings
-    info.connectString = process.env.NODE_ORACLEDB_CONNECTIONSTRING || "10.104.46.205:1523/orcl11g";
+    dbMeta.connectString = process.env.NODE_ORACLEDB_CONNECTIONSTRING || "10.104.46.205:1523/orcl11g";
 
     // Setting externalAuth is optional.  It defaults to false.  See:
     // https://github.com/oracle/node-oracledb/blob/master/doc/api.md#extauth
-    info.externalAuth = !!process.env.NODE_ORACLEDB_EXTERNALAUTH;
+    dbMeta.externalAuth = !!process.env.NODE_ORACLEDB_EXTERNALAUTH;
 
-    return info;
-};
+    return dbMeta;
+}
 
-exports.mongodbConnectionInfo = function () {
-    let info = Object.create(null);
+function metaForMongodb() {
+    let dbMeta = Object.create(null);
     //Database provider
-    info.provider = "mongodb";
+    dbMeta.provider = "mongodb";
     //Mongodb authorization user to access database instance
-    info.user = "cendey";
+    dbMeta.user = "cendey";
 
     //Mongodb authorized user's password
-    info.password = "practice_1216";
+    dbMeta.password = "practice_1216";
 
     //Binding IP address
-    info.ip = "127.0.0.1";
+    dbMeta.ip = "127.0.0.1";
 
     //Access port
-    info.port = "27017";
+    dbMeta.port = "27017";
 
     //Database instance to access
-    info.database = "contacts";
+    dbMeta.database = "contacts";
 
     //Database Url to access
-    info.url = info.provider + "://" + info.user + ":" + info.password + "@" + info.ip + ":" + info.port + "/" + info.database;
-    return info;
-};
+    dbMeta.url = dbMeta.provider + "://" + dbMeta.user + ":" + dbMeta.password + "@" + dbMeta.ip + ":" + dbMeta.port + "/" + dbMeta.database;
+    return dbMeta;
+}
+
+exports = module.exports = {metaForOracle, metaForMongodb};

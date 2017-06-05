@@ -61,7 +61,7 @@ router.delete('/delete/:primarycontactnumber', function (request, response) {
 });
 
 router.get('/list', cache('minutes', 1), function (request, response) {
-    let query = url.parse(request.url, true).query;
+    let query = request.query;
     if (Object.keys(query).length) {
         if (query['limit'] || query['page']) {
             logger.info(`Listing contact with limit ${query["limit"]} or page ${query["page"]}`);
