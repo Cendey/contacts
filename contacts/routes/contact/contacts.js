@@ -21,7 +21,18 @@ const logger = initiate.factory('logger', 'standard');
 const cache = initiate.factory('cache');
 
 initiate.initConnection();
+
 let Contact = initiate.initModel('Contact', initiate.contactSchema());
+Contact.virtual('fullname').get(() => {
+    return this.firstname + ' ' + this.lastname
+}).set((fullname) => {
+    if (!fullname) {
+        let parts = fullname.split(' ');
+        this.firstname = parts[0];
+        this.lastname = parts[1];
+    }
+});
+
 let User = initiate.initModel('User', initiate.authSchema());
 let adminUser = new User({
     username: 'admin',
@@ -71,7 +82,7 @@ router.get('/list', cache('minutes', 1), function (request, response) {
             contactHandle.queryByFilter(Contact, query, response);
         }
     } else {
-        logger.info('Listing all contacts with none filter');
+        logger.info('Listing all contacts without filter');
         contactHandle.queryByPaginate(Contact, request, response);
     }
 });
