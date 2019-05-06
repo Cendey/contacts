@@ -291,7 +291,7 @@ function list(model, response) {
             return null;
         }
         if (response) {
-            response.setHeader('content-type', 'application/json');
+            response.setHeader('Content-type', 'application/json');
             response.end(JSON.stringify(result));
         }
         return JSON.stringify(result);

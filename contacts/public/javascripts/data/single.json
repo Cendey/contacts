@@ -1,0 +1,31 @@
+{
+    "object": "contacts",
+    "result": {
+        "docs": [
+            {
+                "_id": "5873235d9553058cacd53c14",
+                "firstname": "Joe",
+                "lastname": "Smith",
+                "title": "Mr.",
+                "company": "Dev Inc.",
+                "jobtitle": "Developer",
+                "primarycontactnumber": "+359777123456",
+                "primaryemailaddress": "joe.smith@xyz.com",
+                "otheremailaddresses": "j.smith@xyz.com",
+                "__v": 0,
+                "groups": [
+                    "Dev",
+                    "Family"
+                ],
+                "othercontactnumbers": [
+                    "+359777456789",
+                    "+359777112233"
+                ]
+            }
+        ],
+        "total": 5,
+        "limit": 1,
+        "page": 1,
+        "pages": 5
+    }
+}
